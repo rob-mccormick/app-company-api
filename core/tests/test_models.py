@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core import models
+
 
 def sample_user(email="test@email.com", password="testpass"):
     """Create a sample user"""
@@ -42,3 +44,27 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_company_str(self):
+        """Test the company string representation"""
+        company = models.Company.objects.create(
+            company_name='PiedPiper'
+        )
+
+        self.assertEqual(str(company), company.company_name)
+
+    def test_cbjobsdata_str(self):
+        """Test the cbjobsdata string representation"""
+        jobsdata = models.CbJobsData.objects.create(
+            company=models.Company.objects.create(company_name='PiedPiper'),
+            chatbot_user_id='abc123',
+            date_time='2019-12-03T12:34:56Z',
+            specialism_search='Engineering',
+            location_search='London',
+            role_type_search='Leader'
+        )
+
+        self.assertEqual(
+            str(jobsdata),
+            f'{jobsdata.company.company_name} - {jobsdata.date_time}'
+        )

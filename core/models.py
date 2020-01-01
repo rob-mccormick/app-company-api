@@ -35,3 +35,37 @@ class User(PermissionsMixin, AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class Company(models.Model):
+    """Company object"""
+    company_name = models.CharField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Companies"
+
+    def __str__(self):
+        return self.company_name
+
+
+class CbJobsData(models.Model):
+    """Jobs data from chatbot conversations"""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    chatbot_user_id = models.CharField(max_length=60)
+    date_time = models.DateTimeField()
+    specialism_search = models.CharField(max_length=100)
+    location_search = models.CharField(max_length=60)
+    role_type_search = models.CharField(max_length=100)
+    found_job = models.NullBooleanField()
+    saw_benefits = models.NullBooleanField()
+    saw_company_video = models.NullBooleanField()
+    saw_job_video = models.NullBooleanField()
+    add_to_pipeline = models.NullBooleanField()
+    joined_pipeline = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "Chatbot job data"
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.date_time }'
