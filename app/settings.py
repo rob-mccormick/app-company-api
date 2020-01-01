@@ -24,11 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's5*x-=bo^+x8j14q(@$5!3sq$u^a_97*%h(i%*1pv6tgfbh_2!'
+SECRET_KEY = os.environ.get('APP_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = (os.getenv('DEBUG_DEV') == True)
+DEBUG = (os.environ.get('DEBUG_DEV') == 'True')
 
 ALLOWED_HOSTS = []
 
@@ -88,6 +87,17 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 
@@ -177,14 +187,3 @@ django_heroku.settings(locals())
 
 # Set up database for Heroku
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
