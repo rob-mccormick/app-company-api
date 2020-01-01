@@ -19,4 +19,3 @@ class CbJobsDataCreateView(generics.CreateAPIView):
         company = get_object_or_404(Company, pk=company_pk)
 
         serializer.save(company=company)
-
