@@ -33,7 +33,6 @@ SECRET_KEY = os.environ.get('APP_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG_DEV') == 'True')
-# DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '.herokuapp.com']
 
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'core',
     'cbjobsdata',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -107,15 +107,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-# DATABASES = {}
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -157,11 +148,12 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_USER_MODEL = 'core.User'
 
-# Authentication with Auth0
+
+# ---- Authentication with Auth0 ----
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -202,9 +194,10 @@ JWT_AUTH = {
 }
 
 
-# Activate Django-Heroku.
+# ---- Heroku Settings ----
+
 django_heroku.settings(locals())
 
 # Set up database for Heroku
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
