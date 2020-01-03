@@ -3,8 +3,6 @@ from rest_framework.generics import get_object_or_404
 
 from core.models import CbJobsData, Company
 
-# from core.management.auth_scopes import get_token_auth_header
-
 from cbjobsdata.serializers import CbJobsDataCreateSerializer
 
 

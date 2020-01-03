@@ -1,12 +1,7 @@
-cryptography
 django
 djangorestframework
-django-cors-headers
 django-heroku
 dj-database-url
-drf-jwt
 gunicorn
 psycopg2-binary
-pyjwt
 python-dotenv
-requests
