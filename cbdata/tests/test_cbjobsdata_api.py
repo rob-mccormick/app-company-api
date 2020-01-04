@@ -2,8 +2,10 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, force_authenticate
 from rest_framework import status
+
+from rest_framework_api_key.models import APIKey
 
 from core.models import CbJobsData, Company
 
@@ -32,29 +34,27 @@ class PublicCbJobsDataApiTests(TestCase):
         """Test that login is required for accessing cbjobsdata"""
         company = Company.objects.create(company_name='PiedPiper')
         keywords = {'company_pk': company.id}
-        POSTJOBSDATA_URL = reverse('cbjobsdata:cbjobsdata-create',
+        POSTJOBSDATA_URL = reverse('cbdata:cbjobsdata-create',
                                    kwargs=keywords)
         res = self.client.get(POSTJOBSDATA_URL)
 
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class PrivateCbJobsDataApiTests(TestCase):
     """Test the private cbjobsdata API"""
 
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            'test@email.com',
-            'Testpass123'
-        )
+        api_key, key = APIKey.objects.create_key(name="tests")
+
         self.client = APIClient()
-        self.client.force_authenticate(self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Api-Key ' + key)
 
     def test_post_job_data_successful(self):
         """Test posting new job data from the chatbot"""
         company = Company.objects.create(company_name='PiedPiper')
         keywords = {'company_pk': company.id}
-        POSTJOBSDATA_URL = reverse('cbjobsdata:cbjobsdata-create',
+        POSTJOBSDATA_URL = reverse('cbdata:cbjobsdata-create',
                                    kwargs=keywords)
         payload = {
             'chatbot_user_id': 'abc123-3',
@@ -64,6 +64,7 @@ class PrivateCbJobsDataApiTests(TestCase):
             'role_type_search': 'Individual contributor',
             'found_job': 'true'
         }
+
         res = self.client.post(POSTJOBSDATA_URL, payload)
 
         exists = CbJobsData.objects.filter(
@@ -77,7 +78,7 @@ class PrivateCbJobsDataApiTests(TestCase):
         """Test posting new jobs data with invalid payload"""
         company = Company.objects.create(company_name='PiedPiper')
         keywords = {'company_pk': company.id}
-        POSTJOBSDATA_URL = reverse('cbjobsdata:cbjobsdata-create',
+        POSTJOBSDATA_URL = reverse('cbdata:cbjobsdata-create',
                                    kwargs=keywords)
         payload = {
             'chatbot_user_id': 'abc123-3',

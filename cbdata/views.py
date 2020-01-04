@@ -5,7 +5,7 @@ from rest_framework_api_key.permissions import HasAPIKey
 
 from core.models import CbJobsData, Company
 
-from cbjobsdata.serializers import CbJobsDataCreateSerializer
+from cbdata.serializers import CbJobsDataCreateSerializer
 
 
 class CbJobsDataCreateView(generics.CreateAPIView):

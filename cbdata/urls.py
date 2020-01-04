@@ -1,9 +1,9 @@
 from django.urls import path
 
-from cbjobsdata.views import CbJobsDataCreateView
+from cbdata.views import CbJobsDataCreateView
 
 
-app_name = 'cbjobsdata'
+app_name = 'cbdata'
 
 urlpatterns = [
     path(

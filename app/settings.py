@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_api_key',
     'core',
-    'cbjobsdata',
+    'cbdata',
     'whitenoise.runserver_nostatic',
 ]
 
