@@ -69,3 +69,21 @@ class CbJobsData(models.Model):
 
     def __str__(self):
         return f'{ self.company.company_name } - { self.date_time }'
+
+
+class CbQnsData(models.Model):
+    """Questions data from chatbot conversations"""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    chatbot_user_id = models.CharField(max_length=60)
+    date_time = models.DateTimeField()
+    has_question = models.BooleanField(default=False)
+    search_question = models.CharField(max_length=100)
+    question_helpful = models.NullBooleanField()
+    wants_reply = models.NullBooleanField()
+    question_left = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name_plural = "Chatbot question data"
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.date_time }'

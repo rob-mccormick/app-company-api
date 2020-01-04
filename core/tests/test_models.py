@@ -68,3 +68,20 @@ class ModelTests(TestCase):
             str(jobsdata),
             f'{jobsdata.company.company_name} - {jobsdata.date_time}'
         )
+
+    def test_cbqnsdata_str(self):
+        """Test the cbquesdata string representation"""
+        qnsdata = models.CbQnsData.objects.create(
+            company=models.Company.objects.create(company_name='PiedPiper'),
+            chatbot_user_id='abc123',
+            date_time='2020-01-04T09:43:56Z',
+            has_question=True,
+            search_question='Flexible working options',
+            question_helpful=False,
+            wants_reply=False
+        )
+
+        self.assertEqual(
+            str(qnsdata),
+            f'{qnsdata.company.company_name} - {qnsdata.date_time}'
+        )
