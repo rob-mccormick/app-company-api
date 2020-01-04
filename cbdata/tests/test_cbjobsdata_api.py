@@ -1,8 +1,8 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 from rest_framework import status
 
 from rest_framework_api_key.models import APIKey
@@ -30,8 +30,8 @@ class PublicCbJobsDataApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-    def test_login_required(self):
-        """Test that login is required for accessing cbjobsdata"""
+    def test_permission_required(self):
+        """Test that permission is required for accessing cbjobsdata"""
         company = Company.objects.create(company_name='PiedPiper')
         keywords = {'company_pk': company.id}
         POSTJOBSDATA_URL = reverse('cbdata:cbjobsdata-create',

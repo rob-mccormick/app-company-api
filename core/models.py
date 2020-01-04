@@ -77,10 +77,10 @@ class CbQnsData(models.Model):
     chatbot_user_id = models.CharField(max_length=60)
     date_time = models.DateTimeField()
     has_question = models.BooleanField(default=False)
-    search_question = models.CharField(max_length=100)
+    search_question = models.CharField(max_length=100, blank=True)
     question_helpful = models.NullBooleanField()
     wants_reply = models.NullBooleanField()
-    question_left = models.CharField(max_length=255)
+    question_left = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = "Chatbot question data"
