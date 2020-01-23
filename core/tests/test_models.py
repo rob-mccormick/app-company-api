@@ -100,3 +100,41 @@ class ModelTests(TestCase):
             str(browsingdata),
             f'{browsingdata.company.company_name} - {browsingdata.date_time}'
         )
+
+    def test_locations_str(self):
+        """Test the location string representation"""
+        location = models.Location.objects.create(
+            company=models.Company.objects.create(company_name='PiedPiper'),
+            street_address='123 Mare Street',
+            city='London',
+            country='United Kingdom',
+            post_code='E8 3AB'
+        )
+
+        self.assertEqual(
+            str(location),
+            f'{location.company.company_name} - {location.city}'
+        )
+
+    def test_jobs_str(self):
+        """Test the jobs string representation"""
+        job = models.Jobs.objects.create(
+            company=models.Company.objects.create(company_name='PiedPiper'),
+            title='Web Developer',
+            location=models.Location.objects.create(
+                company=models.Company.objects.create(company_name='PiedPiper'),
+                street_address='123 Mare Street',
+                city='London',
+                country='United Kingdom',
+                post_code='E8 3AB'
+            ),
+            specialism='Engineering',
+            role_type='Individual Contributor',
+            job_apply='https://www.idealrole.com/apply/123',
+            active_job=True
+        )
+
+        self.assertEqual(
+            str(job),
+            f'{job.company.company_name} - {job.title}'
+        )

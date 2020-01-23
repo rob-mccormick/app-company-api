@@ -102,3 +102,15 @@ class CbBrowsingData(models.Model):
 
     def __str__(self):
         return f'{ self.company.company_name } - { self.date_time }'
+
+
+class Location(models.Model):
+    """Office locations for each company"""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    street_address = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=60)
+    post_code = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.city }'
