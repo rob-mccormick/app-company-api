@@ -118,11 +118,12 @@ class ModelTests(TestCase):
 
     def test_jobs_str(self):
         """Test the jobs string representation"""
-        job = models.Jobs.objects.create(
-            company=models.Company.objects.create(company_name='PiedPiper'),
+        test_company = models.Company.objects.create(company_name='Hooli')
+        job = models.Job.objects.create(
+            company=test_company,
             title='Web Developer',
             location=models.Location.objects.create(
-                company=models.Company.objects.create(company_name='PiedPiper'),
+                company=test_company,
                 street_address='123 Mare Street',
                 city='London',
                 country='United Kingdom',
@@ -130,7 +131,8 @@ class ModelTests(TestCase):
             ),
             specialism='Engineering',
             role_type='Individual Contributor',
-            job_apply='https://www.idealrole.com/apply/123',
+            description_url='https://www.idealrole.com/apply/123',
+            apply_url='https://www.idealrole.com/apply/123/apply',
             active_job=True
         )
 
