@@ -85,3 +85,18 @@ class ModelTests(TestCase):
             str(qnsdata),
             f'{qnsdata.company.company_name} - {qnsdata.date_time}'
         )
+
+    def test_cbbrowsingdata_str(self):
+        """Test the cbbrowsingdata string representation"""
+        browsingdata = models.CbBrowsingData.objects.create(
+            company=models.Company.objects.create(company_name='PiedPiper'),
+            chatbot_user_id='abc123',
+            date_time='2020-01-04T09:43:56Z',
+            is_browsing=True,
+            why_on_site=''
+        )
+
+        self.assertEqual(
+            str(browsingdata),
+            f'{browsingdata.company.company_name} - {browsingdata.date_time}'
+        )

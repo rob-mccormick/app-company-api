@@ -87,3 +87,18 @@ class CbQnsData(models.Model):
 
     def __str__(self):
         return f'{ self.company.company_name } - { self.date_time }'
+
+
+class CbBrowsingData(models.Model):
+    """Browsing data from chatbot conversations"""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    chatbot_user_id = models.CharField(max_length=60)
+    date_time = models.DateTimeField()
+    is_browsing = models.BooleanField(default=False)
+    why_on_site = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Chatbot browsing data"
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.date_time }'

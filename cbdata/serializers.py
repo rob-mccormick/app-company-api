@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import CbJobsData, CbQnsData
+from core.models import CbJobsData, CbQnsData, CbBrowsingData
 
 
 class CbJobsDataCreateSerializer(serializers.ModelSerializer):
@@ -16,4 +16,12 @@ class CbQnsDataCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CbQnsData
+        exclude = ("company",)
+
+
+class CbBrowsingDataCreateSerializer(serializers.ModelSerializer):
+    """Serializer to create chatbot browsing data objects"""
+
+    class Meta:
+        model = CbBrowsingData
         exclude = ("company",)

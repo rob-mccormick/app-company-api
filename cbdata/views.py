@@ -3,10 +3,11 @@ from rest_framework.generics import get_object_or_404
 
 from rest_framework_api_key.permissions import HasAPIKey
 
-from core.models import CbJobsData, CbQnsData, Company
+from core.models import CbJobsData, CbQnsData, CbBrowsingData, Company
 
 from cbdata.serializers import CbJobsDataCreateSerializer, \
-                               CbQnsDataCreateSerializer
+                               CbQnsDataCreateSerializer, \
+                               CbBrowsingDataCreateSerializer
 
 
 class BasicCbDataCreateView(generics.CreateAPIView):
@@ -31,3 +32,9 @@ class CbQnsDataCreateView(BasicCbDataCreateView):
     """Create new chatbot quetion data objects in the database"""
     queryset = CbQnsData.objects.all()
     serializer_class = CbQnsDataCreateSerializer
+
+
+class CbBrowsingDataCreateView(BasicCbDataCreateView):
+    """Create new chatbot quetion data objects in the database"""
+    queryset = CbBrowsingData.objects.all()
+    serializer_class = CbBrowsingDataCreateSerializer
