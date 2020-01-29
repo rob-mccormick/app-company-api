@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
@@ -118,6 +120,7 @@ class Location(models.Model):
 
 class Job(models.Model):
     """Job objects"""
+    # user = models.ForeignKey('core.User', on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
@@ -131,3 +134,18 @@ class Job(models.Model):
 
     def __str__(self):
         return f'{ self.company.company_name } - { self.title }'
+
+
+class CompanyChatbot(models.Model):
+    """Company chatbot info object"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    career_site_url = models.CharField(max_length=255)
+    privacy_notice_url = models.CharField(max_length=255)
+    next_steps = models.CharField(max_length=255)
+    company_video_url = models.CharField(max_length=255, blank=True)
+    talent_email = models.EmailField(max_length=255)
+
+    def __str__(self):
+        return f'{ self.company.company_name } Chatbot Info'

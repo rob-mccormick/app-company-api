@@ -3,6 +3,7 @@ django-heroku
 dj-database-url
 djangorestframework
 djangorestframework-api-key==1.4.1
+django-rest-hooks
 gunicorn
 psycopg2-binary
 python-dotenv

@@ -46,8 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_api_key',
+    'rest_hooks',
     'core',
     'cbdata',
+    'chatbot',
     'whitenoise.runserver_nostatic',
 ]
 
@@ -142,6 +144,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 AUTH_USER_MODEL = 'core.User'
+
+
+# ---- REST Hook Settings ----
+
+HOOK_EVENTS = {
+    # 'job.added':    'core.Job.created',
+    # 'job.changed':  'core.Job.updated',
+    # 'job.removed':  'core.Job.deleted',
+}
 
 
 # ---- Heroku Settings ----

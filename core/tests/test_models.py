@@ -140,3 +140,25 @@ class ModelTests(TestCase):
             str(job),
             f'{job.company.company_name} - {job.title}'
         )
+
+    def test_company_chatbot_str(self):
+        """Test the company chatbot string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
+
+        company_chatbot = models.CompanyChatbot.objects.create(
+            user=test_user,
+            company=test_company,
+            career_site_url='https://www.company.com/careers',
+            privacy_notice_url='https://www.company.com/privacy',
+            next_steps='get back to you in 3 days.',
+            talent_email='careers@company.com'
+        )
+
+        self.assertEqual(
+            str(company_chatbot),
+            f'{company_chatbot.company.company_name} Chatbot Info'
+        )
