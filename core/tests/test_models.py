@@ -162,3 +162,16 @@ class ModelTests(TestCase):
             str(company_chatbot),
             f'{company_chatbot.company.company_name} Chatbot Info'
         )
+
+    def test_company_apikey_str(self):
+        """Test the company apikey string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_apikey = models.CompanyAPIKey.objects.create(
+            name='Hooli API Key',
+            company=test_company
+        )
+
+        self.assertEqual(
+            str(test_apikey),
+            f'{test_apikey.company.company_name} API Key'
+        )

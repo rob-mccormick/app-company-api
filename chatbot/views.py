@@ -2,8 +2,9 @@ from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 
 from rest_framework_api_key.permissions import HasAPIKey
+# from core.permissions import HasCompanyAPIKey
 
-from core.models import CompanyChatbot, Company, User
+from core.models import CompanyChatbot, Company
 
 from chatbot.serializers import CompanyChatbotSerializer
 
@@ -16,11 +17,9 @@ class CompanyChatbotView(generics.ListAPIView):
 
     def get_queryset(self):
         """Return object for the current authenticated company only"""
-        assigned_only = bool(
-            int(self.request.query_params.get('assigned_only', 0))
-        )
-        queryset = self.queryset
-        if assigned_only:
-            queryset = queryset.filter(companychatbot__isnull=False)
+        company_pk = self.kwargs.get("company_pk")
+        company = get_object_or_404(Company, pk=company_pk)
 
-        return queryset.filter(company=self.request.company)
+        queryset = self.queryset
+
+        return queryset.filter(company=company)

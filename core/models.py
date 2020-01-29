@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
+from rest_framework_api_key.models import AbstractAPIKey
 
 
 class UserManager(BaseUserManager):
@@ -149,3 +150,19 @@ class CompanyChatbot(models.Model):
 
     def __str__(self):
         return f'{ self.company.company_name } Chatbot Info'
+
+
+class CompanyAPIKey(AbstractAPIKey):
+    """Extension of APIKey specific to the company"""
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='api_keys'
+    )
+
+    class Meta(AbstractAPIKey.Meta):
+        verbose_name = 'Company API Key'
+        verbose_name_plural = 'Companies API Keys'
+
+    def __str__(self):
+        return f'{ self.company.company_name } API Key'
