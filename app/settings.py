@@ -152,6 +152,14 @@ HOOK_EVENTS = {
     # 'job.added':    'core.Job.created',
     # 'job.changed':  'core.Job.updated',
     # 'job.removed':  'core.Job.deleted',
+    'companychatbot.added': 'core.CompanyChatbot.created',
+    'companychatbot.changed': 'core.CompanyChatbot.updated',
+    'jobmap.added': 'core.JobMap.created',
+    'jobmap.changed': 'core.JobMap.updated',
+    'jobmap.removed': 'core.JobMap.deleted',
+    # 'location.added': 'core.Location.created',
+    # 'location.changed': 'core.Location.updated',
+    # 'location.removed': 'core.Location.deleted',
 }
 
 

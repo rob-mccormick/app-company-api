@@ -175,3 +175,22 @@ class ModelTests(TestCase):
             str(test_apikey),
             f'{test_apikey.company.company_name} API Key'
         )
+
+    def test_jobmap_str(self):
+        """Test the jobmapping string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
+        test_jobmap = models.JobMap.objects.create(
+            user=test_user,
+            company=test_company,
+            specialism='Design',
+            category_one='Building the product'
+        )
+
+        self.assertEqual(
+            str(test_jobmap),
+            f'{ test_jobmap.specialism } - { test_jobmap.category_one }'
+        )

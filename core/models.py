@@ -118,6 +118,15 @@ class Location(models.Model):
     def __str__(self):
         return f'{ self.company.company_name } - { self.city }'
 
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }
+
 
 class Job(models.Model):
     """Job objects"""
@@ -143,13 +152,26 @@ class CompanyChatbot(models.Model):
     user = models.ForeignKey('core.User', on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     career_site_url = models.CharField(max_length=255)
+    benefits_url = models.CharField(max_length=255, blank=True)
+    benefits_message = models.CharField(max_length=255, blank=True)
     privacy_notice_url = models.CharField(max_length=255)
     next_steps = models.CharField(max_length=255)
     company_video_url = models.CharField(max_length=255, blank=True)
     talent_email = models.EmailField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{ self.company.company_name } Chatbot Info'
+
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }
 
 
 class CompanyAPIKey(AbstractAPIKey):
@@ -166,3 +188,26 @@ class CompanyAPIKey(AbstractAPIKey):
 
     def __str__(self):
         return f'{ self.company.company_name } API Key'
+
+
+class JobMap(models.Model):
+    """Mapping jobs to categories for job search"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    specialism = models.CharField(max_length=60)
+    category_one = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{ self.specialism } - { self.category_one }'
+
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }
