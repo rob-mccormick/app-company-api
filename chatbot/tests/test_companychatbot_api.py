@@ -7,9 +7,9 @@ from rest_framework import status
 
 from rest_framework_api_key.models import APIKey
 
-from core.models import CompanyChatbot, Company
+from core.models import Company, CompanyChatbot, JobMap
 
-from chatbot.serializers import CompanyChatbotSerializer
+from chatbot.serializers import CompanyChatbotSerializer, JobMapSerializer
 
 
 def sample_company_chatbot_data(user, company, company_name, **params):
@@ -27,8 +27,6 @@ def sample_company_chatbot_data(user, company, company_name, **params):
         company=company,
         **defaults
     )
-
-# COMPANYCHATBOT_URL = reverse('chatbot:companychatbot-list')
 
 
 class PublicCompanyChatbotApiTests(TestCase):
@@ -86,7 +84,6 @@ class PrivateCompanyChatbotApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    # Test info is only returned for the authenticated company
     def test_companychatbot_limited_by_company(self):
         """Test that chatbot info for the authenticated company is returned"""
 
@@ -108,6 +105,63 @@ class PrivateCompanyChatbotApiTests(TestCase):
                                      kwargs=keywords)
 
         res = self.client.get(COMPANYCHATBOT_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        self.assertEqual(
+            res.data[0]['company'],
+            data.company.company_name
+        )
+
+    def test_retrieving_jobmap_list(self):
+        """Test retrieving the company jobmap"""
+
+        JobMap.objects.create(
+            user=self.user,
+            company=self.company,
+            specialism='Designer',
+            category_one='Building the product'
+        )
+
+        JobMap.objects.create(
+            user=self.user,
+            company=self.company,
+            specialism='Sales',
+            category_one='Growing the business'
+        )
+
+        keywords = {'company_pk': self.company.id}
+        JOBMAP_URL = reverse('chatbot:jobmap-list', kwargs=keywords)
+
+        res = self.client.get(JOBMAP_URL)
+
+        jobmaps = JobMap.objects.all()
+        serializer = JobMapSerializer(jobmaps, many=True)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_jobmap_limited_by_company(self):
+        """Test that jobmap info for the authenticated company is returned"""
+
+        company2 = Company.objects.create(company_name='Hooli')
+        JobMap.objects.create(
+            user=self.user,
+            company=company2,
+            specialism='Designer',
+            category_one='Building the product'
+        )
+
+        data = JobMap.objects.create(
+            user=self.user,
+            company=self.company,
+            specialism='Sales',
+            category_one='Growing the business'
+        )
+
+        keywords = {'company_pk': self.company.id}
+        JOBMAP_URL = reverse('chatbot:jobmap-list', kwargs=keywords)
+
+        res = self.client.get(JOBMAP_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
