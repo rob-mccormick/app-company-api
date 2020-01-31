@@ -192,5 +192,5 @@ class ModelTests(TestCase):
 
         self.assertEqual(
             str(test_jobmap),
-            f'{ test_jobmap.specialism } - { test_jobmap.category_one }'
+            f'{ test_jobmap.company.company_name } - { test_jobmap.specialism }'
         )

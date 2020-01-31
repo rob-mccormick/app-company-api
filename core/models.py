@@ -201,7 +201,7 @@ class JobMap(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{ self.specialism } - { self.category_one }'
+        return f'{ self.company.company_name } - { self.specialism }'
 
     def serialize_hook(self, hook):
         """Create a skinny payload to notify chatbot of change"""
