@@ -192,5 +192,24 @@ class ModelTests(TestCase):
 
         self.assertEqual(
             str(test_jobmap),
-            f'{ test_jobmap.company.company_name } - { test_jobmap.specialism }'
+            f'{test_jobmap.company.company_name} - {test_jobmap.specialism}'
+        )
+
+    def test_benefit_str(self):
+        """Test the benefit string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
+        test_benefit = models.Benefit.objects.create(
+            user=test_user,
+            company=test_company,
+            title='Paid parental leave',
+            active_benefit=True
+        )
+
+        self.assertEqual(
+            str(test_benefit),
+            f'{test_benefit.company.company_name} - {test_benefit.title}'
         )

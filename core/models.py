@@ -211,3 +211,28 @@ class JobMap(models.Model):
                 'change': True
             }
         }
+
+
+class Benefit(models.Model):
+    """Benefits provided by the company"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    title = models.CharField(max_length=60)
+    blurb = models.CharField(max_length=255, blank=True)
+    icon_url = models.CharField(max_length=255, blank=True)
+    active_benefit = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.title }'
+
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }
