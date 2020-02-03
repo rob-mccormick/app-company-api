@@ -103,7 +103,12 @@ class ModelTests(TestCase):
 
     def test_locations_str(self):
         """Test the location string representation"""
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
         location = models.Location.objects.create(
+            user=test_user,
             company=models.Company.objects.create(company_name='PiedPiper'),
             street_address='123 Mare Street',
             city='London',
@@ -119,10 +124,15 @@ class ModelTests(TestCase):
     def test_jobs_str(self):
         """Test the jobs string representation"""
         test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
         job = models.Job.objects.create(
             company=test_company,
             title='Web Developer',
             location=models.Location.objects.create(
+                user=test_user,
                 company=test_company,
                 street_address='123 Mare Street',
                 city='London',

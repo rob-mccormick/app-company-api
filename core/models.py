@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
+from django.conf import settings
 from rest_framework_api_key.models import AbstractAPIKey
 
 
@@ -109,11 +110,18 @@ class CbBrowsingData(models.Model):
 
 class Location(models.Model):
     """Office locations for each company"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        default=1
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     street_address = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=60)
     post_code = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{ self.company.company_name } - { self.city }'
@@ -149,7 +157,10 @@ class Job(models.Model):
 class CompanyChatbot(models.Model):
     """Company chatbot info object"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     career_site_url = models.CharField(max_length=255)
     benefits_url = models.CharField(max_length=255, blank=True)
@@ -193,7 +204,10 @@ class CompanyAPIKey(AbstractAPIKey):
 class JobMap(models.Model):
     """Mapping jobs to categories for job search"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     specialism = models.CharField(max_length=60)
     category_one = models.CharField(max_length=100)
@@ -216,7 +230,10 @@ class JobMap(models.Model):
 class Benefit(models.Model):
     """Benefits provided by the company"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField(max_length=60)
     blurb = models.CharField(max_length=255, blank=True)
