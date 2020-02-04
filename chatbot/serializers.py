@@ -25,12 +25,25 @@ class CompanyChatbotSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class LocationSerializer(serializers.ModelSerializer):
+    """Serializer for Location objects"""
+
+    user = serializers.StringRelatedField(read_only=True)
+    company = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Location
+        fields = "__all__"
+
+
 class JobSerializer(serializers.ModelSerializer):
     """Serializer for Job objects"""
 
     user = serializers.StringRelatedField(read_only=True)
     company = serializers.StringRelatedField(read_only=True)
-    location = serializers.StringRelatedField(read_only=True)
+    # location = serializers.StringRelatedField(read_only=True)
+    # location = serializers.PrimaryKeyRelatedField(read_only=True)
+    location = LocationSerializer(read_only=True)
 
     class Meta:
         model = Job
@@ -45,15 +58,4 @@ class JobMapSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobMap
-        fields = "__all__"
-
-
-class LocationSerializer(serializers.ModelSerializer):
-    """Serializer for Location objects"""
-
-    user = serializers.StringRelatedField(read_only=True)
-    company = serializers.StringRelatedField(read_only=True)
-
-    class Meta:
-        model = Location
         fields = "__all__"
