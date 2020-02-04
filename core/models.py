@@ -136,6 +136,32 @@ class Location(models.Model):
         }
 
 
+class JobMap(models.Model):
+    """Mapping jobs to categories for job search"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    specialism = models.CharField(max_length=60)
+    category_one = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.specialism }'
+
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }
+
+
 class Job(models.Model):
     """Job objects"""
     user = models.ForeignKey(
@@ -144,9 +170,9 @@ class Job(models.Model):
         default=1
     )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    specialism = models.CharField(max_length=100)
+    specialism = models.ManyToManyField(JobMap)
+    title = models.CharField(max_length=100)
     role_type = models.CharField(max_length=100)
     description_url = models.CharField(max_length=255)
     apply_url = models.CharField(max_length=255)
@@ -214,32 +240,6 @@ class CompanyAPIKey(AbstractAPIKey):
 
     def __str__(self):
         return f'{ self.company.company_name } API Key'
-
-
-class JobMap(models.Model):
-    """Mapping jobs to categories for job search"""
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    specialism = models.CharField(max_length=60)
-    category_one = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{ self.company.company_name } - { self.specialism }'
-
-    def serialize_hook(self, hook):
-        """Create a skinny payload to notify chatbot of change"""
-        return {
-            'hook': hook.dict(),
-            'data': {
-                'change': True
-            }
-        }
 
 
 class Benefit(models.Model):
