@@ -138,7 +138,11 @@ class Location(models.Model):
 
 class Job(models.Model):
     """Job objects"""
-    # user = models.ForeignKey('core.User', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        default=1
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
@@ -149,9 +153,20 @@ class Job(models.Model):
     video_url = models.CharField(max_length=255, blank=True)
     intro = models.CharField(max_length=255, blank=True)
     active_job = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{ self.company.company_name } - { self.title }'
+
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }
 
 
 class CompanyChatbot(models.Model):
@@ -163,9 +178,9 @@ class CompanyChatbot(models.Model):
     )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     career_site_url = models.CharField(max_length=255)
+    privacy_notice_url = models.CharField(max_length=255)
     benefits_url = models.CharField(max_length=255, blank=True)
     benefits_message = models.CharField(max_length=255, blank=True)
-    privacy_notice_url = models.CharField(max_length=255)
     next_steps = models.CharField(max_length=255)
     company_video_url = models.CharField(max_length=255, blank=True)
     talent_email = models.EmailField(max_length=255)

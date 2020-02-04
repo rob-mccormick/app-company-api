@@ -129,6 +129,7 @@ class ModelTests(TestCase):
             password='Testpass123'
         )
         job = models.Job.objects.create(
+            user=test_user,
             company=test_company,
             title='Web Developer',
             location=models.Location.objects.create(

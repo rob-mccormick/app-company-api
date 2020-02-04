@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import Benefit, CompanyChatbot, JobMap, Location
+from core.models import Benefit, CompanyChatbot, Job, JobMap, Location
 
 
 class BenefitSerializer(serializers.ModelSerializer):
@@ -22,6 +22,18 @@ class CompanyChatbotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompanyChatbot
+        fields = "__all__"
+
+
+class JobSerializer(serializers.ModelSerializer):
+    """Serializer for Job objects"""
+
+    user = serializers.StringRelatedField(read_only=True)
+    company = serializers.StringRelatedField(read_only=True)
+    location = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Job
         fields = "__all__"
 
 

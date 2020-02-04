@@ -1,7 +1,7 @@
 from django.urls import path
 
-from chatbot.views import BenefitView, CompanyChatbotView, JobMapView, \
-                          LocationView
+from chatbot.views import BenefitView, CompanyChatbotView, JobView, \
+                          JobMapView, LocationView
 
 
 app_name = 'chatbot'
@@ -16,6 +16,11 @@ urlpatterns = [
         'companychatbot/<int:company_pk>',
         CompanyChatbotView.as_view(),
         name='companychatbot-list'
+    ),
+    path(
+        'job/<int:company_pk>',
+        JobView.as_view(),
+        name='job-list'
     ),
     path(
         'jobmap/<int:company_pk>',

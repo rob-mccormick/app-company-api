@@ -149,9 +149,9 @@ AUTH_USER_MODEL = 'core.User'
 # ---- REST Hook Settings ----
 
 HOOK_EVENTS = {
-    # 'job.added':    'core.Job.created',
-    # 'job.changed':  'core.Job.updated',
-    # 'job.removed':  'core.Job.deleted',
+    'job.added':    'core.Job.created',
+    'job.changed':  'core.Job.updated',
+    'job.removed':  'core.Job.deleted',
     'benefit.added': 'core.Benefit.created',
     'benefit.changed': 'core.Benefit.updated',
     'benefit.removed': 'core.Benefit.deleted', 

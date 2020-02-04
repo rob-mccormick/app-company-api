@@ -4,10 +4,11 @@ from rest_framework.generics import get_object_or_404
 from rest_framework_api_key.permissions import HasAPIKey
 # from core.permissions import HasCompanyAPIKey
 
-from core.models import Benefit, Company, CompanyChatbot, JobMap, Location
+from core.models import Benefit, Company, CompanyChatbot, Job, JobMap, Location
 
 from chatbot.serializers import BenefitSerializer, CompanyChatbotSerializer, \
-                                JobMapSerializer, LocationSerializer
+                                JobSerializer, JobMapSerializer, \
+                                LocationSerializer
 
 
 class BenefitView(generics.ListAPIView):
@@ -23,7 +24,7 @@ class BenefitView(generics.ListAPIView):
 
         queryset = self.queryset
 
-        return queryset.filter(company=company)
+        return queryset.filter(company=company, active_benefit=True)
 
 
 class CompanyChatbotView(generics.ListAPIView):
@@ -40,6 +41,23 @@ class CompanyChatbotView(generics.ListAPIView):
         queryset = self.queryset
 
         return queryset.filter(company=company)
+
+
+class JobView(generics.ListAPIView):
+    """Base view set for getting job objects from the database"""
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
+    permission_classes = (HasAPIKey,)
+
+    def get_queryset(self):
+        """Return active objects for the current authenticated company only"""
+        company_pk = self.kwargs.get("company_pk")
+        company = get_object_or_404(Company, pk=company_pk)
+
+        queryset = self.queryset
+
+        # return queryset.filter(company=company)
+        return queryset.filter(company=company, active_job=True)
 
 
 class JobMapView(generics.ListAPIView):
