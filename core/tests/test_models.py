@@ -223,3 +223,23 @@ class ModelTests(TestCase):
             str(test_benefit),
             f'{test_benefit.company.company_name} - {test_benefit.title}'
         )
+
+    def test_questions_str(self):
+        """Test the question string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
+        test_question = models.Question.objects.create(
+            user=test_user,
+            company=test_company,
+            topic='Prepare application',
+            question='Preparing your CV',
+            answer="We want to hear about what you've achieved, your strengths"
+        )
+
+        self.assertEqual(
+            str(test_question),
+            f'{test_question.company.company_name} - {test_question.question}'
+        )

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from core.models import Benefit, CompanyChatbot, Job, JobMap, Location
+from core.models import Benefit, CompanyChatbot, Job, JobMap, Location, \
+                        Question
 
 
 class BenefitSerializer(serializers.ModelSerializer):
@@ -69,3 +70,11 @@ class JobSerializer(serializers.ModelSerializer):
             'video_url',
             'intro'
         ]
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    """Serializer for Question objects"""
+
+    class Meta:
+        model = Question
+        fields = ['topic', 'question', 'answer']

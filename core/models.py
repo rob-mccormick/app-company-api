@@ -268,3 +268,31 @@ class Benefit(models.Model):
                 'change': True
             }
         }
+
+
+class Question(models.Model):
+    """Questions provided by the company"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    topic = models.CharField(max_length=100)
+    question = models.CharField(max_length=100)
+    answer = models.TextField()
+    active_question = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.question }'
+
+    def serialize_hook(self, hook):
+        """Create a skinny payload to notify chatbot of change"""
+        return {
+            'hook': hook.dict(),
+            'data': {
+                'change': True
+            }
+        }

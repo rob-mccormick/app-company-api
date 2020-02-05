@@ -163,6 +163,9 @@ HOOK_EVENTS = {
     'location.added': 'core.Location.created',
     'location.changed': 'core.Location.updated',
     'location.removed': 'core.Location.deleted',
+    'question.added': 'core.Question.created',
+    'question.changed': 'core.Question.updated',
+    'question.removed': 'core.Question.deleted',
 }
 
 
