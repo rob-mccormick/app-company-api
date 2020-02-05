@@ -30,7 +30,7 @@ def sample_location(user, company, **params):
     )
 
 
-def sample_job(user, company, title, specialism, **params):
+def sample_job(user, company, title, **params):
     """Create and return a sample job"""
 
     location = sample_location(user=user, company=company)
@@ -48,7 +48,6 @@ def sample_job(user, company, title, specialism, **params):
         user=user,
         company=company,
         title=title,
-        specialism=specialism,
         **defaults
     )
 
@@ -93,15 +92,13 @@ class PrivateJobApiTests(TestCase):
         sample_job(
             user=self.user,
             company=self.company,
-            title='Front End Engineer',
-            specialism='Engineering'
+            title='Front End Engineer'
         )
 
         sample_job(
             user=self.user,
             company=self.company,
-            title='Customer Success Manager',
-            specialism='Customer Success'
+            title='Customer Success Manager'
         )
 
         keywords = {'company_pk': self.company.id}
@@ -122,15 +119,13 @@ class PrivateJobApiTests(TestCase):
         sample_job(
             user=self.user,
             company=company2,
-            title='Front End Engineer',
-            specialism='Engineering'
+            title='Front End Engineer'
         )
 
         data = sample_job(
             user=self.user,
             company=self.company,
-            title='Customer Success Manager',
-            specialism='Customer Success'
+            title='Customer Success Manager'
         )
 
         keywords = {'company_pk': self.company.id}
@@ -141,8 +136,8 @@ class PrivateJobApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(
-            res.data[0]['company'],
-            data.company.company_name
+            res.data[0]['title'],
+            data.title
         )
 
     def test_active_jobs_returned(self):
@@ -152,15 +147,13 @@ class PrivateJobApiTests(TestCase):
             user=self.user,
             company=self.company,
             title='Front End Engineer',
-            specialism='Engineering',
             active_job=False
         )
 
         data = sample_job(
             user=self.user,
             company=self.company,
-            title='Customer Success Manager',
-            specialism='Customer Success'
+            title='Customer Success Manager'
         )
 
         keywords = {'company_pk': self.company.id}

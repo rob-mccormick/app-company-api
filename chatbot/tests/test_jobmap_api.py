@@ -99,6 +99,6 @@ class PrivateJobMapApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(
-            res.data[0]['company'],
-            data.company.company_name
+            res.data[0]['specialism'],
+            data.specialism
         )

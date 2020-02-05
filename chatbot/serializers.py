@@ -18,7 +18,6 @@ class BenefitSerializer(serializers.ModelSerializer):
 class CompanyChatbotSerializer(serializers.ModelSerializer):
     """Serializer for CompanyChatbot objects"""
 
-    # user = serializers.StringRelatedField(read_only=True)
     company = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -33,38 +32,27 @@ class CompanyChatbotSerializer(serializers.ModelSerializer):
             'company_video_url',
             'talent_email'
         ]
-        # fields = "__all__"
 
 
 class LocationSerializer(serializers.ModelSerializer):
     """Serializer for Location objects"""
 
-    # user = serializers.StringRelatedField(read_only=True)
-    # company = serializers.StringRelatedField(read_only=True)
-
     class Meta:
         model = Location
-        # fields = "__all__"
         fields = ['street_address', 'city', 'country']
 
 
 class JobMapSerializer(serializers.ModelSerializer):
     """Serializer for JobMap objects"""
 
-    # user = serializers.StringRelatedField(read_only=True)
-    # company = serializers.StringRelatedField(read_only=True)
-
     class Meta:
         model = JobMap
-        # fields = "__all__"
         fields = ['specialism', 'category_one']
 
 
 class JobSerializer(serializers.ModelSerializer):
     """Serializer for Job objects"""
 
-    # user = serializers.StringRelatedField(read_only=True)
-    # company = serializers.StringRelatedField(read_only=True)
     location = LocationSerializer(read_only=True)
     specialism = JobMapSerializer(many=True, read_only=True)
 
@@ -81,4 +69,3 @@ class JobSerializer(serializers.ModelSerializer):
             'video_url',
             'intro'
         ]
-        # fields = "__all__"

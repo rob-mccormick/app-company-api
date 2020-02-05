@@ -140,7 +140,6 @@ class ModelTests(TestCase):
                 country='United Kingdom',
                 post_code='E8 3AB'
             ),
-            specialism='Engineering',
             role_type='Individual Contributor',
             description_url='https://www.idealrole.com/apply/123',
             apply_url='https://www.idealrole.com/apply/123/apply',
