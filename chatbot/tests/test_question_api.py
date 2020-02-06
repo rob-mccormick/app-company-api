@@ -7,16 +7,31 @@ from rest_framework import status
 
 from rest_framework_api_key.models import APIKey
 
-from core.models import Company, Question
+from core.models import Company, Question, QuestionTopic
 
 from chatbot.serializers import QuestionSerializer
 
 
-def sample_question(user, company, **params):
+def sample_questiontopic(user, company, **params):
+    """Create and return a sample question topic"""
+
+    defaults = {
+        'index': 'prepareApplication',
+        'string': 'Preparing my application'
+    }
+    defaults.update(params)
+
+    return QuestionTopic.objects.create(
+        user=user,
+        company=company,
+        **defaults
+    )
+
+
+def sample_question(user, company, topic, **params):
     """Create and return sample question"""
 
     defaults = {
-        'topic': 'prepareApplication',
         'question': 'Preparing your CV',
         'answer': "We want to hear about what you've achieved, your strengths\
                   and skills.\n\nWe also want to know how you can apply them \
@@ -28,6 +43,7 @@ def sample_question(user, company, **params):
     return Question.objects.create(
         user=user,
         company=company,
+        topic=topic,
         **defaults
     )
 
@@ -65,6 +81,7 @@ class PrivateQuestionApiTests(TestCase):
             'testpass'
         )
         self.company = Company.objects.create(company_name='PiedPiper')
+        self.topic = sample_questiontopic(self.user, self.company)
 
         api_key, key = APIKey.objects.create_key(
             name="PiedPiper API Key",
@@ -76,9 +93,15 @@ class PrivateQuestionApiTests(TestCase):
     def test_retrieving_question_list(self):
         """Test retrieving questions for a company"""
 
-        sample_question(self.user, self.company)
+        sample_question(self.user, self.company, self.topic)
 
-        sample_question(self.user, self.company, topic='flexibleWorking')
+        topic2 = sample_questiontopic(
+            self.user,
+            self.company,
+            index='flexibleWorking'
+        )
+
+        sample_question(self.user, self.company, topic2)
 
         QUESTION_URL = get_url(self.company)
 
@@ -93,9 +116,9 @@ class PrivateQuestionApiTests(TestCase):
         """Test that questions for the authenticated company is returned"""
         company2 = Company.objects.create(company_name='Hooli')
 
-        sample_question(self.user, company2)
+        sample_question(self.user, company2, self.topic)
 
-        data = sample_question(self.user, self.company)
+        data = sample_question(self.user, self.company, self.topic)
 
         QUESTION_URL = get_url(self.company)
 
@@ -104,16 +127,19 @@ class PrivateQuestionApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(
-            res.data[0]['topic'],
-            data.topic
+            res.data[0]['topic']['index'],
+            data.topic.index
         )
 
     def test_active_questions_returned(self):
         """Test that only active questions are returned"""
 
-        sample_question(self.user, self.company, active_question=False)
+        sample_question(self.user,
+                        self.company,
+                        self.topic,
+                        active_question=False)
 
-        data = sample_question(self.user, self.company)
+        data = sample_question(self.user, self.company, self.topic)
 
         QUESTION_URL = get_url(self.company)
 
@@ -122,6 +148,6 @@ class PrivateQuestionApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(
-            res.data[0]['topic'],
-            data.topic
+            res.data[0]['topic']['index'],
+            data.topic.index
         )

@@ -231,10 +231,16 @@ class ModelTests(TestCase):
             email='test@email.com',
             password='Testpass123'
         )
+        test_topic = models.QuestionTopic.objects.create(
+            user=test_user,
+            company=test_company,
+            index='prepareApplication',
+            string='Preparing my application'
+        )
         test_question = models.Question.objects.create(
             user=test_user,
             company=test_company,
-            topic='Prepare application',
+            topic=test_topic,
             question='Preparing your CV',
             answer="We want to hear about what you've achieved, your strengths"
         )
@@ -242,4 +248,24 @@ class ModelTests(TestCase):
         self.assertEqual(
             str(test_question),
             f'{test_question.company.company_name} - {test_question.question}'
+        )
+
+    def test_question_topics_str(self):
+        """Test the questiontopic string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
+        test_questiontopic = models.QuestionTopic.objects.create(
+            user=test_user,
+            company=test_company,
+            index='prepareApplication',
+            string='Preparing my application',
+        )
+
+        self.assertEqual(
+            str(test_questiontopic),
+            (f'{test_questiontopic.company.company_name}'
+             f' - {test_questiontopic.index}')
         )
