@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
 from django.conf import settings
-from rest_framework_api_key.models import AbstractAPIKey
 
 
 class UserManager(BaseUserManager):
@@ -31,6 +30,7 @@ class UserManager(BaseUserManager):
 
 class User(PermissionsMixin, AbstractBaseUser):
     """Custom model that supports using email instead of username"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -43,6 +43,7 @@ class User(PermissionsMixin, AbstractBaseUser):
 
 class Company(models.Model):
     """Company object"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company_name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
 
@@ -55,6 +56,7 @@ class Company(models.Model):
 
 class CbJobsData(models.Model):
     """Jobs data from chatbot conversations"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     chatbot_user_id = models.CharField(max_length=60)
     date_time = models.DateTimeField()
@@ -77,6 +79,7 @@ class CbJobsData(models.Model):
 
 class CbQnsData(models.Model):
     """Questions data from chatbot conversations"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     chatbot_user_id = models.CharField(max_length=60)
     date_time = models.DateTimeField()
@@ -95,6 +98,7 @@ class CbQnsData(models.Model):
 
 class CbBrowsingData(models.Model):
     """Browsing data from chatbot conversations"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     chatbot_user_id = models.CharField(max_length=60)
     date_time = models.DateTimeField()
@@ -110,10 +114,10 @@ class CbBrowsingData(models.Model):
 
 class Location(models.Model):
     """Office locations for each company"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        default=1
+        on_delete=models.CASCADE
     )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     street_address = models.CharField(max_length=255)
@@ -180,10 +184,10 @@ class RoleType(models.Model):
 
 class Job(models.Model):
     """Job objects"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        default=1
+        on_delete=models.CASCADE
     )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
@@ -240,22 +244,6 @@ class CompanyChatbot(models.Model):
                 'change': True
             }
         }
-
-
-class CompanyAPIKey(AbstractAPIKey):
-    """Extension of APIKey specific to the company"""
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        related_name='api_keys'
-    )
-
-    class Meta(AbstractAPIKey.Meta):
-        verbose_name = 'Company API Key'
-        verbose_name_plural = 'Companies API Keys'
-
-    def __str__(self):
-        return f'{ self.company.company_name } API Key'
 
 
 class Benefit(models.Model):

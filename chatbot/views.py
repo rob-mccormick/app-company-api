@@ -56,7 +56,6 @@ class JobView(generics.ListAPIView):
 
         queryset = self.queryset
 
-        # return queryset.filter(company=company)
         return queryset.filter(company=company, active_job=True)
 
 

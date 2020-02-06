@@ -8,32 +8,32 @@ app_name = 'chatbot'
 
 urlpatterns = [
     path(
-        'benefit/<int:company_pk>',
+        'benefit/<uuid:company_pk>',
         BenefitView.as_view(),
         name='benefit-list'
     ),
     path(
-        'companychatbot/<int:company_pk>',
+        'companychatbot/<uuid:company_pk>',
         CompanyChatbotView.as_view(),
         name='companychatbot-list'
     ),
     path(
-        'job/<int:company_pk>',
+        'job/<uuid:company_pk>',
         JobView.as_view(),
         name='job-list'
     ),
     path(
-        'jobmap/<int:company_pk>',
+        'jobmap/<uuid:company_pk>',
         JobMapView.as_view(),
         name='jobmap-list'
     ),
     path(
-        'location/<int:company_pk>',
+        'location/<uuid:company_pk>',
         LocationView.as_view(),
         name='location-list'
     ),
     path(
-        'question/<int:company_pk>',
+        'question/<uuid:company_pk>',
         QuestionView.as_view(),
         name='question-list'
     ),
