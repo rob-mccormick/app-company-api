@@ -162,6 +162,22 @@ class JobMap(models.Model):
         }
 
 
+class RoleType(models.Model):
+    """Role types for the company"""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    role_type = models.CharField(max_length=60)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{ self.company.company_name } - { self.role_type }'
+
+
 class Job(models.Model):
     """Job objects"""
     user = models.ForeignKey(
@@ -173,7 +189,7 @@ class Job(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     specialism = models.ManyToManyField(JobMap)
     title = models.CharField(max_length=100)
-    role_type = models.CharField(max_length=100)
+    role_type = models.ForeignKey(RoleType, on_delete=models.CASCADE)
     description_url = models.CharField(max_length=255)
     apply_url = models.CharField(max_length=255)
     video_url = models.CharField(max_length=255, blank=True)

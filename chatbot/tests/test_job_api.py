@@ -7,7 +7,7 @@ from rest_framework import status
 
 from rest_framework_api_key.models import APIKey
 
-from core.models import Company, Job, Location
+from core.models import Company, Job, Location, RoleType
 
 from chatbot.serializers import JobSerializer
 
@@ -30,14 +30,30 @@ def sample_location(user, company, **params):
     )
 
 
+def sample_roletype(user, company, **params):
+    """Create and return a sample role type"""
+
+    defaults = {
+        'role_type': 'Team leader'
+    }
+    defaults.update(params)
+
+    return RoleType.objects.create(
+        user=user,
+        company=company,
+        **defaults
+    )
+
+
 def sample_job(user, company, title, **params):
     """Create and return a sample job"""
 
     location = sample_location(user=user, company=company)
+    role_type = sample_roletype(user=user, company=company)
 
     defaults = {
         'location': location,
-        'role_type': 3,
+        'role_type': role_type,
         'description_url': 'http://www.piedpiper.com/job/23',
         'apply_url': 'http://www.piedpiper.com/job/23/apply',
         'active_job': True

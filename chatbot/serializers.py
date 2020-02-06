@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from core.models import Benefit, CompanyChatbot, Job, JobMap, Location, \
-                        Question, QuestionTopic
+                        Question, QuestionTopic, RoleType
 
 
 class BenefitSerializer(serializers.ModelSerializer):
@@ -51,11 +51,20 @@ class JobMapSerializer(serializers.ModelSerializer):
         fields = ['specialism', 'category_one']
 
 
+class RoleTypeSerializer(serializers.ModelSerializer):
+    """Serializer for QuestionTopic objects"""
+
+    class Meta:
+        model = RoleType
+        fields = ['role_type']
+
+
 class JobSerializer(serializers.ModelSerializer):
     """Serializer for Job objects"""
 
     location = LocationSerializer(read_only=True)
     specialism = JobMapSerializer(many=True, read_only=True)
+    role_type = RoleTypeSerializer(read_only=True)
 
     class Meta:
         model = Job

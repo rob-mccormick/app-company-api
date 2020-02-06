@@ -140,7 +140,11 @@ class ModelTests(TestCase):
                 country='United Kingdom',
                 post_code='E8 3AB'
             ),
-            role_type='Individual Contributor',
+            role_type=models.RoleType.objects.create(
+                user=test_user,
+                company=test_company,
+                role_type='Team leader'
+            ),
             description_url='https://www.idealrole.com/apply/123',
             apply_url='https://www.idealrole.com/apply/123/apply',
             active_job=True
@@ -268,4 +272,22 @@ class ModelTests(TestCase):
             str(test_questiontopic),
             (f'{test_questiontopic.company.company_name}'
              f' - {test_questiontopic.index}')
+        )
+
+    def test_roletype_str(self):
+        """Test the roletype string representation"""
+        test_company = models.Company.objects.create(company_name='Hooli')
+        test_user = get_user_model().objects.create_user(
+            email='test@email.com',
+            password='Testpass123'
+        )
+        test_roletype = models.RoleType.objects.create(
+            user=test_user,
+            company=test_company,
+            role_type='Team leader'
+        )
+
+        self.assertEqual(
+            str(test_roletype),
+            f'{test_roletype.company.company_name} - {test_roletype.role_type}'
         )
