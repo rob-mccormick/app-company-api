@@ -1,55 +1,21 @@
-# Ideal Role Company App API
+# Ideal Role API app
 
-An app to store company chatbot conversation data.
+This REST API app was built to provide company details to a recruitment chatbot. The API also collected analytics and information users entered while using the chatbot.
 
+## Background
+The idea for the chatbot started when I was speaking to people about applying for jobs. Often they had questions but no way of getting answers. So they didn’t apply.
 
+While the questions people had were varied, they tended to fall into common categories. Which meant a chatbot could answer most of them in a couple of minutes, 24/7. The chatbot’s goal was to guide people to the right job and help them to apply. Getting more candidates for the companies using it.
 
+The chatbot had three parts: 
+1. The chatbot ([repo](https://github.com/rob-mccormick/gloria-master))
+	2. The web chat window
+	3. A REST API to access specific company details and save analytics data (this repo).
 
+## What it’s built with
+- Django REST Framework
+- PostgreSQL
 
+When it was running, the app was hosted on Heroku.
 
-
-
-
-Example info below____
-
-
-
-## Running Locally
-
-Make sure you have Python 3.7 [installed locally](http://install.python-guide.org). To push to Heroku, you'll need to install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), as well as [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
-
-```sh
-$ git clone https://github.com/heroku/python-getting-started.git
-$ cd python-getting-started
-
-$ python3 -m venv getting-started
-$ pip install -r requirements.txt
-
-$ createdb python_getting_started
-
-$ python manage.py migrate
-$ python manage.py collectstatic
-
-$ heroku local
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```sh
-$ heroku create
-$ git push heroku master
-
-$ heroku run python manage.py migrate
-$ heroku open
-```
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Python on Heroku, see these Dev Center articles:
-
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
+You can learn more about the chatbot on [my portfolio site](https://robmc.dev/portfolio/chatbot).
